@@ -26,6 +26,18 @@ Craft IP packets manually using raw sockets. Headers, TTL, fragmentation — all
 
 ## Running
 
+Create and activate a virtualenv:
+```bash
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install -U pip
+```
+
+Install (editable) so the `ifs` package is importable:
+```bash
+python -m pip install -e ".[dev]"
+```
+
 Start the server:
 ```bash
 python server.py
@@ -34,6 +46,11 @@ python server.py
 Send a request:
 ```bash
 python client.py
+```
+
+Run the strict mock server (HTTP/1.1 parsing via uvicorn+h11):
+```bash
+python mock_server.py --host 127.0.0.1 --port 8080
 ```
 
 ## References

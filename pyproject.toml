@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ifs"
+version = "0.1.0"
+description = "Reimplementing the internet protocol stack from HTTP down to IP, one layer at a time."
+readme = "README.md"
+requires-python = ">=3.11"
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8",
+  "fastapi>=0.110",
+  "uvicorn[h11]>=0.27",
+]
+
+[project.scripts]
+ifs-server = "ifs.cli.server:main"
+ifs-client = "ifs.cli.client:main"
+ifs-mock-server = "ifs_mock_server.cli:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+

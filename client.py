@@ -1,15 +1,33 @@
+import argparse
 import socket
-from http.message import HttpRequest, HttpResponse
 
-client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client.connect(('localhost', 8082))
+from ifs.ifshttp.message import HttpRequest, HttpResponse
 
-request = HttpRequest('GET', headers={'Host': 'localhost'})
 
-client.sendall(request.to_bytes())
-data = client.recv(1024)
+def main() -> int:
+    parser = argparse.ArgumentParser(description="internet-from-scratch: demo HTTP client (OS TCP)")
+    parser.add_argument("--host", default="127.0.0.1")
+    parser.add_argument("--port", type=int, default=8082)
+    parser.add_argument("--path", default="/")
+    args = parser.parse_args()
 
-response = HttpResponse.from_bytes(data)
-print(f'Received from server (raw): \r\n=====================\r\n{response.to_bytes().decode()}\r\n=====================\r\n')
+    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    client.connect((args.host, args.port))
 
-client.close()
+    request = HttpRequest("GET", path=args.path, headers={"Host": args.host})
+    client.sendall(request.to_bytes())
+
+    data = client.recv(1024)
+    response = HttpResponse.from_bytes(data)
+    print(
+        "Received from server (raw): \r\n=====================\r\n"
+        f"{response.to_bytes().decode()}\r\n=====================\r\n"
+    )
+
+    client.close()
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+

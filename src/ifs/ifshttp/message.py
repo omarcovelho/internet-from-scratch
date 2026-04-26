@@ -1,3 +1,6 @@
+# Copied from the repo's original top-level `http/message.py`.
+# This lives under the package to avoid shadowing Python's stdlib `http`.
+
 # RFC 9112 (HTTP/1.1 Message Syntax) glossary used by this file:
 # - CRLF: Carriage Return + Line Feed, "\r\n" (line terminator on the wire)
 # - SP:   Space character, " " (used to separate tokens in start-lines)
@@ -32,14 +35,13 @@ class HttpMessage:
             return f"{line}{CRLF}{header_lines}{CRLF}{CRLF}".encode()
         return f"{line}{CRLF}{CRLF}".encode()
 
-
     @staticmethod
     def split_head(data: bytes) -> tuple[str, list[str]]:
         if CRLFCRLF_BYTES not in data:
             raise ValueError("Invalid HTTP message: missing CRLFCRLF terminator")
 
         head, rest = data.split(CRLFCRLF_BYTES, 1)
-        
+
         lines = head.split(CRLF_BYTES)
         if not lines or lines[0] == b"":
             raise ValueError("Invalid HTTP message: missing start-line")
@@ -107,3 +109,4 @@ class HttpResponse(HttpMessage):
             raise ValueError(f"Unsupported HTTP version: {version!r}")
         headers = cls.parse_headers(header_lines)
         return cls(status_code=int(status_code), reason_phrase=reason, headers=headers)
+
