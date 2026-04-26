@@ -14,7 +14,7 @@ def root() -> str:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Protocol-strict HTTP/1.1 mock server (uvicorn + h11).")
     parser.add_argument("--host", default="127.0.0.1")
-    parser.add_argument("--port", type=int, default=8080)
+    parser.add_argument("--port", type=int, default=8082)
     args = parser.parse_args()
 
     import uvicorn

@@ -9,12 +9,17 @@ def main() -> int:
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=8082)
     parser.add_argument("--path", default="/")
+    parser.add_argument("--proxy", default="127.0.0.1")
     args = parser.parse_args()
 
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client.connect((args.host, args.port))
 
-    request = HttpRequest("GET", path=args.path, headers={"Host": args.host})
+    request = HttpRequest("GET", path="/", host="127.0.0.1")
+    print(
+        "Sending to server (raw): \r\n=====================\r\n"
+        f"{request.to_bytes().decode()}\r\n=====================\r\n"
+    )
     client.sendall(request.to_bytes())
 
     data = client.recv(1024)

@@ -28,7 +28,12 @@ def main() -> int:
             f"{req.to_bytes().decode()}\r\n=====================\r\n"
         )
 
-        client_socket.sendall(HttpResponse(200, "OK", headers={"Content-Type": "text/plain"}).to_bytes())
+        response = HttpResponse(200, "OK", headers={"Content-Type": "text/plain"})
+        client_socket.sendall(response.to_bytes())
+        print(
+            "Sent to client (raw): \r\n=====================\r\n"
+            f"{response.to_bytes().decode()}\r\n=====================\r\n"
+        )
         client_socket.close()
 
         if args.once:
